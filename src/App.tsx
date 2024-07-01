@@ -116,12 +116,19 @@ const App: React.FC = () => {
                 <button className="btn" onClick={handleBookTrip}>Book Trip</button>
                 <button className="btn" onClick={handleClearFields}>Clear Fields</button>
             </div>
+
+            <div className="form-row">
+                <div className="rider">
+                    Rider Name: <span>{rider.name}</span>
+                </div>
+            </div>
+
             {trip && (
                 <div className="trip-details">
                     <h2>Trip Details</h2>
-                    <p>Driver: {trip.driver.name}</p>
-                    <p>Rider: {trip.rider.name}</p>
-                    <p>Fare: ${trip.fare.toFixed(2)}</p>
+                    <p>Driver: <span>{trip.driver.name}</span></p>
+                    {/* <p>Rider: {trip.rider.name}</p> */}
+                    <p>Fare: <span>${trip.fare.toFixed(2)}</span></p>
                 </div>
             )}
         </div>

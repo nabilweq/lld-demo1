@@ -68,3 +68,17 @@
   margin: 10px 0;
   font-size: 16px;
 }
+
+.trip-details span {
+  font-weight: 500;
+}
+
+.rider {
+  padding-top: 10px;
+  font-weight: 200;
+}
+
+.rider span{
+  padding-top: 10px;
+  font-weight: 500;
+}
