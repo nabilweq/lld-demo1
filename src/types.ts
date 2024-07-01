@@ -1,8 +1,4 @@
-export enum Status {
-    IDLE,
-    BOOKED,
-    ON_TRIP
-}
+import { Status } from './common';
 
 export class Location {
     constructor(public latitude: number, public longitude: number) {}
@@ -22,7 +18,7 @@ export class Rider {
 }
 
 export interface PricingStrategy {
-    calculatePrice(start: Location, end: Location): number;
+    calculatePrice(trip: Trip): number;
 }
 
 export interface DriverMatchingStrategy {
@@ -36,6 +32,10 @@ export class Trip {
         public driver: Driver,
         public startLocation: Location,
         public endLocation: Location,
-        public fare: number
+        public metaData: TripMetaData
     ) {}
+}
+
+export class TripMetaData {
+    constructor(public startLocation: Location, public endLocation: Location, public fare: number) {}
 }

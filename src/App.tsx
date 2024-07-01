@@ -1,10 +1,20 @@
 import React, { useState } from 'react';
-import './App.css';
-import { Location, Driver, Rider, Trip, PricingStrategy, DriverMatchingStrategy, Status } from './types';
-import { DefaultPricingStrategy, RatingBasedPricingStrategy } from './pricingStrategies';
-import { LeastTimeBasedMatchingStrategy, HighestRatedMatchingStrategy } from './driverMatchingStrategies';
+import './styles/App.css';
+import { Location, Driver, Rider, Trip, PricingStrategy, DriverMatchingStrategy, TripMetaData } from './types';
+import { Status } from './common';
+import { DefaultPricingStrategy, RatingBasedPricingStrategy } from './startegies/pricingStrategies';
+import { LeastTimeBasedMatchingStrategy, HighestRatedMatchingStrategy } from './startegies/driverMatchingStrategies';
+import { TripMgr } from './managers/tripMgr';
+import { DriverMgr } from './managers/driverMgr';
+import { RiderMgr } from './managers/riderMgr';
+import { StrategyMgr } from './managers/strategyMgr';
+import { Uber } from './uber';
 
 const App: React.FC = () => {
+    const driverMgr = new DriverMgr();
+    const riderMgr = new RiderMgr();
+    const tripMgr = new TripMgr();
+
     const [startLatitude, setStartLatitude] = useState<number>(0);
     const [startLongitude, setStartLongitude] = useState<number>(0);
     const [endLatitude, setEndLatitude] = useState<number>(0);
@@ -14,14 +24,18 @@ const App: React.FC = () => {
 
     const [trip, setTrip] = useState<Trip | null>(null);
 
+    //Sample Drivers
     const driver1 = new Driver(1, 'Paul Walker', 8.2);
     const driver2 = new Driver(2, 'Lewis Hamilton', 9.2);
+    driverMgr.addDriver(driver1);
+    driverMgr.addDriver(driver2);
     
+    //Primary Rider
     const rider = new Rider(1, 'Dwayne Johnson');
-
-    const availableDrivers: Driver[] = [driver1, driver2];
+    riderMgr.addRider(rider);
 
     const handleBookTrip = () => {
+        
         const startLocation = new Location(startLatitude, startLongitude);
         const endLocation = new Location(endLatitude, endLongitude);
 
@@ -39,16 +53,16 @@ const App: React.FC = () => {
             matching = new LeastTimeBasedMatchingStrategy();
         }
 
-        const matchedDriver = matching.findDriver(availableDrivers, startLocation);
+        const strategyMgr = new StrategyMgr(pricing, matching);
+        const uber = new Uber(driverMgr, riderMgr, tripMgr, strategyMgr);
 
-        if (matchedDriver) {
-            matchedDriver.status = Status.BOOKED;
-            const fare = pricing.calculatePrice(startLocation, endLocation);
-            const newTrip = new Trip(1, rider, matchedDriver, startLocation, endLocation, fare);
-            setTrip(newTrip);
-        } else {
-            alert('No available drivers.');
-        }
+        const trip:Trip | null = uber.bookTrip(rider, startLocation, endLocation);
+        
+        if(!trip)alert('Sorry, the drivers are busy right now!')
+        else setTrip(trip);
+
+        console.log(trip);
+        
     };
 
     const handleClearFields = () => {
@@ -128,7 +142,7 @@ const App: React.FC = () => {
                     <h2>Trip Details</h2>
                     <p>Driver: <span>{trip.driver.name}</span></p>
                     {/* <p>Rider: {trip.rider.name}</p> */}
-                    <p>Fare: <span>${trip.fare.toFixed(2)}</span></p>
+                    <p>Fare: <span>${trip.metaData.fare.toFixed(2)}</span></p>
                 </div>
             )}
         </div>

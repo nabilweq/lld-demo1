@@ -1,4 +1,5 @@
-import { DriverMatchingStrategy, Driver, Location, Status } from './types';
+import { DriverMatchingStrategy, Driver, Location } from '../types';
+import { Status } from '../common';
 
 export class LeastTimeBasedMatchingStrategy implements DriverMatchingStrategy {
     findDriver(drivers: Driver[], location: Location): Driver | null {
