@@ -15,6 +15,7 @@ export class Uber {
 
     bookTrip(rider: Rider, startLocation: Location, endLocation: Location): Trip | null {
         const availableDrivers = this.driverMgr.getDrivers().filter((driver:Driver) => driver.status === Status.IDLE);
+        console.log(availableDrivers);
         
         const matchedDriver = this.strategyMgr.driverMatchingStrategy.findDriver(availableDrivers, startLocation);
         
@@ -38,7 +39,7 @@ export class Uber {
 
         this.tripMgr.addTrip(trip);
         
-        matchedDriver.status = Status.BOOKED;
+        this.driverMgr.updateDriverStatus(matchedDriver.id, Status.BOOKED);
     
         return trip;
     }

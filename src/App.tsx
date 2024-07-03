@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import './styles/App.css';
-import { Location, Driver, Rider, Trip, PricingStrategy, DriverMatchingStrategy, TripMetaData } from './types';
-import { Status } from './common';
+import { Location, Driver, Rider, Trip, PricingStrategy, DriverMatchingStrategy } from './types';
 import { DefaultPricingStrategy, RatingBasedPricingStrategy } from './startegies/pricingStrategies';
 import { LeastTimeBasedMatchingStrategy, HighestRatedMatchingStrategy } from './startegies/driverMatchingStrategies';
 import { TripMgr } from './managers/tripMgr';
@@ -10,8 +9,21 @@ import { RiderMgr } from './managers/riderMgr';
 import { StrategyMgr } from './managers/strategyMgr';
 import { Uber } from './uber';
 
+const driverMgr = new DriverMgr();
+const riderMgr = new RiderMgr();
+
+//Sample Drivers
+const driver1 = new Driver(1, 'Paul Walker', 8.5);
+const driver2 = new Driver(2, 'Lewis Hamilton', 9.2);
+driverMgr.addDriver(driver1);
+driverMgr.addDriver(driver2);
+
+//Primary Rider
+const rider = new Rider(1, 'Dwayne Johnson');
+riderMgr.addRider(rider);
+
 const App: React.FC = () => {
-    const driverMgr = new DriverMgr();
+
     const riderMgr = new RiderMgr();
     const tripMgr = new TripMgr();
 
@@ -23,16 +35,6 @@ const App: React.FC = () => {
     const [matchingStrategy, setMatchingStrategy] = useState<string>('leastTime');
 
     const [trip, setTrip] = useState<Trip | null>(null);
-
-    //Sample Drivers
-    const driver1 = new Driver(1, 'Paul Walker', 8.2);
-    const driver2 = new Driver(2, 'Lewis Hamilton', 9.2);
-    driverMgr.addDriver(driver1);
-    driverMgr.addDriver(driver2);
-    
-    //Primary Rider
-    const rider = new Rider(1, 'Dwayne Johnson');
-    riderMgr.addRider(rider);
 
     const handleBookTrip = () => {
         
@@ -58,11 +60,10 @@ const App: React.FC = () => {
 
         const trip:Trip | null = uber.bookTrip(rider, startLocation, endLocation);
         
-        if(!trip)alert('Sorry, the drivers are busy right now!')
+        if(!trip) alert('Sorry, the drivers are busy right now!')
         else setTrip(trip);
 
-        console.log(trip);
-        
+        // console.log(trip);
     };
 
     const handleClearFields = () => {
