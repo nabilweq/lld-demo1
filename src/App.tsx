@@ -19,6 +19,7 @@ const driver2 = new Driver(2, 'Lewis Hamilton', 9.2);
 const driver3 = new Driver(3, 'Michael Schumacher', 9.6);
 driverMgr.addDriver(driver1);
 driverMgr.addDriver(driver2);
+driverMgr.addDriver(driver3);
 
 //Primary Rider
 const rider = new Rider(1, 'Dwayne Johnson');
