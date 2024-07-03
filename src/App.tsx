@@ -9,12 +9,14 @@ import { RiderMgr } from './managers/riderMgr';
 import { StrategyMgr } from './managers/strategyMgr';
 import { Uber } from './uber';
 
+const tripMgr = new TripMgr();
 const driverMgr = new DriverMgr();
 const riderMgr = new RiderMgr();
 
 //Sample Drivers
-const driver1 = new Driver(1, 'Paul Walker', 8.5);
+const driver1 = new Driver(1, 'Paul Walker', 8.4);
 const driver2 = new Driver(2, 'Lewis Hamilton', 9.2);
+const driver3 = new Driver(3, 'Michael Schumacher', 9.6);
 driverMgr.addDriver(driver1);
 driverMgr.addDriver(driver2);
 
@@ -23,9 +25,6 @@ const rider = new Rider(1, 'Dwayne Johnson');
 riderMgr.addRider(rider);
 
 const App: React.FC = () => {
-
-    const riderMgr = new RiderMgr();
-    const tripMgr = new TripMgr();
 
     const [startLatitude, setStartLatitude] = useState<number>(0);
     const [startLongitude, setStartLongitude] = useState<number>(0);
